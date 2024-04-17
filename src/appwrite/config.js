@@ -1,4 +1,4 @@
-import { Client, ID, Query } from "appwrite";
+import { Client, Query } from "appwrite";
 import conf from "../conf/conf";
 
 class Service {
@@ -13,12 +13,12 @@ class Service {
     console.log(ID.unique());
   }
 
-  async createPost({ title, description, image, status, userId }) {
+  async createPost({ title, slug, description, image, status, userId }) {
     try {
       return await this.database.createDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
-        ID.unique(),
+        slug,
         { title, description, image, status, userId }
       );
     } catch (error) {
@@ -26,12 +26,12 @@ class Service {
     }
   }
 
-  async updatePost(id, { title, description, image, status, userId }) {
+  async updatePost({ title, description, image, status, userId }) {
     try {
       return await this.database.updateDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
-        id,
+        slug,
         { title, description, image, status, userId }
       );
     } catch (error) {
@@ -39,12 +39,12 @@ class Service {
     }
   }
 
-  async deletePost(id) {
+  async deletePost(slug) {
     try {
       await this.database.deleteDocument(
         conf.appwriteDatabaseId,
         conf.appwriteCollectionId,
-        id
+        slug
       );
       return true;
     } catch (error) {
@@ -53,9 +53,9 @@ class Service {
     }
   }
 
-  async getPost(id) {
+  async getPost(slug) {
     try {
-      return await this.database.listDocuments(id);
+      return await this.database.listDocuments(slug);
     } catch (error) {
       console.log("Appwrite service :: deletePost :: error", error);
       return false;
