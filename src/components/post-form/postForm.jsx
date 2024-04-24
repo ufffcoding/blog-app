@@ -1,9 +1,8 @@
 import React, { useEffect, useCallback } from "react";
 import { useForm } from "react-hook-form";
-import { Button, Input, Select } from "../index";
+import { Button, Input, RTE, Select } from "../index";
 import service from "../../appwrite/config";
 import { useSelector } from "react-redux";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function postForm({ post }) {
@@ -14,8 +13,9 @@ function postForm({ post }) {
     useForm({
       defaultValues: {
         title: post?.title || "",
-        slug: post?.slug || "",
+        slug: post?.$id || "",
         description: post?.description || "",
+        category: post?.category || "general",
         status: post?.status || "active",
       },
     });
@@ -47,7 +47,7 @@ function postForm({ post }) {
           userId: userData.$id,
         });
         if (createPost) {
-          navigate(`/post/${createPost.$id}`);
+          navigate(`/all-posts`);
         }
       }
     }
@@ -69,8 +69,8 @@ function postForm({ post }) {
   }, [watch, slugTransform, setValue]);
 
   return (
-    <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
-      <div className="w-2/3 px-2">
+    <form onSubmit={handleSubmit(submit)} className="flex flex-wrap ">
+      <div className="lg:w-2/3 px-2">
         <Input
           label="Title :"
           placeholder="Title"
@@ -87,6 +87,7 @@ function postForm({ post }) {
               shouldValidate: true,
             });
           }}
+          readOnly={true}
         />
         <RTE
           label="Description"
@@ -95,33 +96,39 @@ function postForm({ post }) {
           defaultValue={getValues("description")}
         />
       </div>
-      <div className="w-1/3 px-2">
+      <div className="lg:w-1/3 flex flex-col gap-2 px-2">
         <Input
           label="Image :"
           type="file"
-          className="mb-4"
+          className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer file:bg-gray-300 file:border-none bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
           accept="image/png, image/jpg, image/jpeg, image/gif"
           {...register("image", { required: !post })}
         />
         {post && (
           <div className="w-full mb-4">
             <img
-              src={appwriteService.getFilePreview(post.image)}
+              src={service.getFilepreview(post.image)}
               alt={post.title}
               className="rounded-lg"
             />
           </div>
         )}
         <Select
+          options={["general", "technology", "science", "sci-fiction"]}
+          label="Category"
+          className=""
+          {...register("category", { required: true })}
+        />
+        <Select
           options={["active", "inactive"]}
           label="Status"
-          className="mb-4"
-          {...register("status", { required: true })}
+          className=""
+          {...register("status", { default: "active" })}
         />
         <Button
           type="submit"
           bgColor={post ? "bg-green-500" : undefined}
-          className="w-full"
+          className="w-full bg-slate-900 rounded text-white"
         >
           {post ? "Update" : "Submit"}
         </Button>

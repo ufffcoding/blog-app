@@ -2,18 +2,23 @@ import React from "react";
 import service from "../appwrite/config";
 import { Link } from "react-router-dom";
 
-function PostCard({ $id, title, featuredImage }) {
+function PostCard({ $id, title, category, image }) {
   return (
     <Link to={`/post/${$id}`}>
-      <div className="w-full bg-gray-100 rounded-xl p-4">
-        <div className="w-full justify-center mb-4">
-          <img
-            src={service.getFilePreview(featuredImage)}
-            alt={title}
-            className="rounded-xl"
-          />
+      <div className="border rounded-t-md bg-white shadow-lg transition-transform hover:scale-125">
+        <img
+          src={service.getFilepreview(image)}
+          className="aspect-video w-full rounded-md"
+          alt={title}
+        />
+        <div className="min-h-min p-3">
+          <p className="mt-4 w-full text-xs font-semibold leading-tight text-gray-700">
+            #{category}
+          </p>
+          <p className="mt-4 flex-1 text-base font-semibold text-gray-900">
+            {title}
+          </p>
         </div>
-        <h2 className="text-xl font-bold">{title}</h2>
       </div>
     </Link>
   );

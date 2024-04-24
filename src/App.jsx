@@ -3,7 +3,7 @@ import authService from "./appwrite/auth.js";
 import { useDispatch } from "react-redux";
 import { login, logout } from "./store/authSlice";
 import { Outlet } from "react-router-dom";
-import Navigation from "./components/header/Navigation";
+import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 
 function App() {
@@ -25,11 +25,15 @@ function App() {
 
   return !loading ? (
     <>
-      <Navigation />
-      <Outlet />
+      <Header />
+      <main>
+        <Outlet />
+      </main>
       <Footer />
     </>
-  ) : null;
+  ) : (
+    <>Loading...</>
+  );
 }
 
 export default App;
