@@ -26,13 +26,15 @@ function App() {
   return !loading ? (
     <>
       <Header />
-      <main>
+      <main className="min-h-screen">
         <Outlet />
       </main>
       <Footer />
     </>
   ) : (
-    <>Loading...</>
+    <div className="flex justify-center items-center w-full h-screen">
+      <a className="">Loading...</a>
+    </div>
   );
 }
 
